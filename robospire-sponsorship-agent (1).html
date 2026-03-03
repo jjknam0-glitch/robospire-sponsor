@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoboSpire — Sponsorship Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0d1117;--s:#161b22;--s2:#21262d;--s3:#30363d;
+  --bd:#30363d;--bd2:#444c56;
+  --bl:#2f81f7;--bl2:#58a6ff;--ba:rgba(47,129,247,.15);--bb:rgba(47,129,247,.06);
+  --or:#f0883e;--oa:rgba(240,136,62,.15);
+  --gr:#3fb950;--ga:rgba(63,185,80,.12);
+  --re:#f85149;--ra:rgba(248,81,73,.12);
+  --ye:#d29922;--ya:rgba(210,153,34,.15);
+  --tx:#e6edf3;--tx2:#8b949e;--tx3:#6e7681;--tx4:#484f58;
+}
+body.light {
+  --bg:#ffffff;--s:#f6f8fa;--s2:#eaeef2;--s3:#d0d7de;
+  --bd:#d0d7de;--bd2:#afb8c1;
+  --bl:#0969da;--bl2:#0550ae;--ba:rgba(9,105,218,.1);--bb:rgba(9,105,218,.05);
+  --or:#bc4c00;--oa:rgba(188,76,0,.1);
+  --gr:#1a7f37;--ga:rgba(26,127,55,.1);
+  --re:#cf222e;--ra:rgba(207,34,46,.08);
+  --ye:#9a6700;--ya:rgba(154,103,0,.1);
+  --tx:#1f2328;--tx2:#636c76;--tx3:#818b98;--tx4:#adbac7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
+
+.topnav{background:var(--s);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;position:sticky;top:0;z-index:100;flex-wrap:wrap;min-height:52px}
+.logo{font-size:15px;font-weight:700;padding:14px 0;margin-right:18px;white-space:nowrap;flex-shrink:0}
+.logo em{color:var(--bl);font-style:normal}
+.navtabs{display:flex;flex:1;overflow-x:auto}
+.ntab{padding:14px 13px;font-size:13px;font-weight:500;color:var(--tx2);background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all .15s}
+.ntab:hover{color:var(--tx)}
+.ntab.active{color:var(--bl);border-bottom-color:var(--bl)}
+.nbadge{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;background:var(--ba);color:var(--bl)}
+.nbadge.or{background:var(--oa);color:var(--or)}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;padding:10px 0;flex-shrink:0}
+.thbtns{display:flex;background:var(--s2);border:1px solid var(--bd);border-radius:6px;overflow:hidden}
+.thbtn{padding:5px 10px;font-size:12px;font-weight:500;color:var(--tx3);border:none;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.thbtn.active{background:var(--s3);color:var(--tx)}
+
+.statsbar{background:var(--s);border-bottom:1px solid var(--bd);padding:6px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.stat{font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:5px}
+.stat strong{font-weight:600}
+.sep{width:1px;height:12px;background:var(--bd)}
+
+.page{display:none;padding:20px;max-width:820px;margin:0 auto}
+.page.active{display:block}
+
+.card{background:var(--s);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.cardhead{padding:10px 16px;border-bottom:1px solid var(--bd);background:var(--s2);display:flex;align-items:center;justify-content:space-between}
+.ctitle{font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.6px}
+
+.fr{display:flex;align-items:center;padding:0 16px;border-bottom:1px solid var(--bd);gap:12px;transition:background .15s}
+.fr:last-child{border-bottom:none}
+.fr:focus-within{background:var(--bb)}
+.fl{font-size:12px;font-weight:500;color:var(--tx3);min-width:92px;flex-shrink:0}
+.fr input,.fr select{flex:1;border:none;background:transparent;color:var(--tx);font-family:'Inter',sans-serif;font-size:14px;padding:11px 0;outline:none;min-width:0}
+.fr input::placeholder{color:var(--tx4)}
+.fr select{cursor:pointer}
+.fr select option{background:var(--s)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:7px 14px;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:all .15s;white-space:nowrap}
+.bp{background:var(--bl);color:#fff;border-color:var(--bl)}
+.bp:hover:not(:disabled){background:var(--bl2);border-color:var(--bl2)}
+.bp:disabled{opacity:.4;cursor:not-allowed}
+.bg{background:transparent;color:var(--tx2);border-color:var(--bd)}
+.bg:hover{color:var(--tx);border-color:var(--bd2)}
+.bo{background:var(--or);color:#fff;border-color:var(--or)}
+.bo:hover{opacity:.88}
+.sm{padding:5px 11px;font-size:12px}
+.xs{padding:3px 8px;font-size:11px;border-radius:5px}
+.bfull{width:100%;margin-top:10px;height:38px}
+
+.bdg{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.b-bl{background:var(--ba);color:var(--bl)}
+.b-gr{background:var(--ga);color:var(--gr)}
+.b-re{background:var(--ra);color:var(--re)}
+.b-ye{background:var(--ya);color:var(--ye)}
+.b-gy{background:var(--s3);color:var(--tx3)}
+.b-or{background:var(--oa);color:var(--or)}
+
+.steps{display:flex;background:var(--s2);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:14px;width:fit-content;flex-wrap:wrap}
+.step{padding:7px 14px;font-size:12px;font-weight:500;color:var(--tx3);border-right:1px solid var(--bd);transition:all .2s}
+.step:last-child{border-right:none}
+.step.on{background:var(--s);color:var(--bl)}
+.step.done{color:var(--gr)}
+
+.rev{display:none;margin-top:10px}
+.rev.open{display:block}
+
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}
+.ri label{font-size:10px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:3px}
+.rv{font-size:13px;color:var(--tx);line-height:1.4}
+.rfull{grid-column:1/-1}
+.cbox{grid-column:1/-1;background:var(--bb);border:1px solid rgba(47,129,247,.15);border-radius:7px;padding:12px 14px}
+
+.emeta{padding:9px 16px;border-bottom:1px solid var(--bd);background:var(--s2)}
+.emrow{display:flex;gap:8px;font-size:13px;padding:2px 0}
+.emlbl{color:var(--tx3);font-weight:500;min-width:52px;flex-shrink:0}
+.ebody{padding:18px;font-size:13.5px;line-height:1.85;color:var(--tx);white-space:pre-wrap;font-weight:300}
+.efoot{padding:10px 16px;border-top:1px solid var(--bd);background:var(--s2);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+
+.gpanel{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.gf label{font-size:12px;font-weight:500;color:var(--tx3);display:block;margin-bottom:4px}
+.gf input{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:8px 12px;color:var(--tx);font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .15s}
+.gf input:focus{border-color:var(--bl)}
+.gnote{padding:8px 16px;font-size:11px;color:var(--tx3);border-top:1px solid var(--bd);background:var(--s2);line-height:1.6}
+.gok{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gr);font-weight:500;padding:12px 16px}
+
+.dupwarn{display:none;padding:9px 13px;background:var(--oa);border:1px solid rgba(240,136,62,.3);border-radius:7px;color:var(--or);font-size:12px;align-items:center;gap:7px;margin-top:8px}
+.dupwarn.show{display:flex}
+
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;padding:9px 14px;border-bottom:1px solid var(--bd);background:var(--s2);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--bd);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bb)}
+
+.csrow{display:flex;align-items:flex-start;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--bd);gap:12px;transition:background .12s}
+.csrow:last-child{border-bottom:none}
+.csrow:hover{background:var(--bb)}
+.csleft{flex:1;min-width:0}
+.csname{font-size:14px;font-weight:600;margin-bottom:3px}
+.cswhy{font-size:12px;color:var(--tx3);line-height:1.4;margin-bottom:6px}
+.cstags{display:flex;gap:4px;flex-wrap:wrap}
+.ctag{display:inline-flex;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;background:var(--s3);color:var(--tx3)}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:900;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:var(--s);border:1px solid var(--bd);border-radius:10px;width:520px;max-width:100%;max-height:90vh;overflow-y:auto}
+.modal.wide{width:620px}
+.mhead{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.mtitle{font-size:14px;font-weight:700}
+.mclose{background:transparent;border:none;color:var(--tx3);cursor:pointer;font-size:20px;line-height:1;padding:2px 6px;border-radius:4px;font-family:'Inter',sans-serif}
+.mclose:hover{background:var(--s2);color:var(--tx)}
+.mbody{padding:18px;display:flex;flex-direction:column;gap:12px}
+.mfoot{padding:12px 18px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end;background:var(--s2)}
+.msel{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:8px 12px;color:var(--tx);font-family:'Inter',sans-serif;font-size:13px;outline:none}
+.mta{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:8px 12px;color:var(--tx);font-family:'Inter',sans-serif;font-size:13px;outline:none;resize:vertical;min-height:90px}
+
+.empty{text-align:center;padding:50px 20px;color:var(--tx3)}
+.eico{font-size:2.5rem;display:block;margin-bottom:10px;opacity:.35}
+.empty p{font-size:13px}
+
+.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.2);border-top-color:currentColor;border-radius:50%;animation:rot .7s linear infinite;flex-shrink:0;display:inline-block;vertical-align:middle}
+.spind{border-color:var(--bd2);border-top-color:var(--tx3)}
+
+.row{display:flex;align-items:center;gap:8px}
+.jb{justify-content:space-between}
+.trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px}
+.tw-wrap{position:fixed;bottom:16px;right:16px;z-index:999;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.toast{background:var(--s);border:1px solid var(--bd);color:var(--tx);padding:8px 13px;border-radius:7px;font-size:13px;font-weight:500;opacity:0;transform:translateX(12px);transition:all .25s;max-width:260px;display:flex;align-items:center;gap:6px}
+.toast.show{opacity:1;transform:translateX(0)}
+
+@keyframes rot{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fadeUp .2s ease both}
+@media(max-width:600px){.rg{grid-template-columns:1fr}.page{padding:14px}.rfull{grid-column:1}}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="logo">Robo<em>Spire</em></div>
+  <div class="navtabs">
+    <button class="ntab active" id="tab-new" onclick="goTab('new')">New Campaign</button>
+    <button class="ntab" id="tab-finder" onclick="goTab('finder')">Find Companies</button>
+    <button class="ntab" id="tab-sent" onclick="goTab('sent')">Sent <span class="nbadge" id="nb-sent">0</span></button>
+    <button class="ntab" id="tab-responses" onclick="goTab('responses')">Responses <span class="nbadge or" id="nb-resp" style="display:none">0</span></button>
+  </div>
+  <div class="nav-right">
+    <div class="thbtns">
+      <button class="thbtn active" id="th-dark" onclick="setTheme('dark')">&#127769; Dark</button>
+      <button class="thbtn" id="th-light" onclick="setTheme('light')">&#9728;&#65039; Light</button>
+    </div>
+  </div>
+</div>
+
+<div class="statsbar">
+  <div class="stat">Sent <strong id="st-sent">0</strong></div>
+  <div class="sep"></div>
+  <div class="stat" style="color:var(--gr)">Accepted <strong id="st-acc">0</strong></div>
+  <div class="sep"></div>
+  <div class="stat" style="color:var(--ye)">Awaiting <strong id="st-wait">0</strong></div>
+  <div class="sep"></div>
+  <div class="stat" style="color:var(--re)">Declined <strong id="st-dec">0</strong></div>
+</div>
+
+<!-- PAGE: NEW CAMPAIGN -->
+<div class="page active" id="page-new">
+
+  <div class="card">
+    <div class="cardhead">
+      <span class="ctitle">Gmail Account</span>
+      <span id="gmail-badge" class="bdg b-gy"><span class="dot"></span>Not connected</span>
+    </div>
+    <div id="gmail-form">
+      <div class="gpanel">
+        <div class="gf">
+          <label>Gmail address</label>
+          <input type="email" id="gmailAddr" placeholder="you@gmail.com" oninput="gmailCheck()"/>
+        </div>
+        <div class="gf">
+          <label>App Password &nbsp;<a href="https://myaccount.google.com/apppasswords" target="_blank" style="color:var(--bl);font-size:11px">Get one here</a></label>
+          <input type="password" id="gmailPass" placeholder="xxxx xxxx xxxx xxxx" oninput="gmailCheck()"/>
+        </div>
+        <button class="btn bp sm" id="gmailSaveBtn" onclick="saveGmail()" disabled>Connect Gmail</button>
+      </div>
+      <div class="gnote">&#128274; Only used to open Gmail compose. Never stored on any server.</div>
+    </div>
+    <div id="gmail-connected" style="display:none">
+      <div class="gok">
+        &#10003; Connected as <strong id="gmail-addr-lbl" style="margin-left:4px"></strong>
+        <button class="btn bg xs" style="margin-left:auto" onclick="disconnectGmail()">Change</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step on" id="stp1">1 Company</div>
+    <div class="step" id="stp2">2 Research</div>
+    <div class="step" id="stp3">3 Compose</div>
+    <div class="step" id="stp4">4 Send</div>
+  </div>
+
+  <div class="card">
+    <div class="cardhead"><span class="ctitle">Target Company</span></div>
+    <div class="fr">
+      <span class="fl">Company</span>
+      <input type="text" id="companyName" placeholder="Any company worldwide — Google, Siemens, Samsung, Shopify..." autocomplete="off"/>
+      <button class="btn bp sm" id="lookupBtn" onclick="doResearch()"><span id="lookupTxt">Look up</span></button>
+    </div>
+  </div>
+  <div class="dupwarn" id="dupWarn">
+    <span>&#9888;</span><span id="dupTxt"></span>
+  </div>
+
+  <div class="rev" id="rev-research">
+    <div class="card anim">
+      <div class="cardhead">
+        <span class="ctitle">Company Intelligence</span>
+        <div class="row">
+          <span id="rBadge" class="bdg b-gy"><span class="dot"></span>Loading</span>
+          <button class="btn bg sm" onclick="resetCampaign()">Reset</button>
+        </div>
+      </div>
+      <div class="rg" id="rGrid">
+        <div class="rfull row" style="color:var(--tx3);gap:8px"><span class="spin spind"></span>Researching...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rev" id="rev-compose">
+    <div class="card anim">
+      <div class="cardhead"><span class="ctitle">Email Details</span></div>
+      <div class="fr">
+        <span class="fl">Sender</span>
+        <select id="senderName">
+          <option value="Jayden Nam, Co-Founder">Jayden Nam &mdash; Co-Founder</option>
+          <option value="Benjamin Kwon, Co-Founder">Benjamin Kwon &mdash; Co-Founder</option>
+          <option value="Utsav Das, CTO">Utsav Das &mdash; CTO</option>
+          <option value="Jacob Silag, COO">Jacob Silag &mdash; COO</option>
+        </select>
+      </div>
+      <div class="fr">
+        <span class="fl">Tone</span>
+        <select id="emailTone">
+          <option value="warm, genuine, and deeply appreciative">Warm &amp; Genuine</option>
+          <option value="bold and confident while sincerely grateful">Bold &amp; Confident</option>
+          <option value="storytelling and personal, expressing real appreciation">Storytelling</option>
+          <option value="concise and direct, genuinely thankful">Concise &amp; Direct</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn bp bfull" id="genBtn" onclick="doGenerate()"><span id="genTxt">Generate Email</span></button>
+  </div>
+
+  <div class="rev" id="rev-email">
+    <div class="card anim">
+      <div class="cardhead">
+        <span class="ctitle">Generated Email</span>
+        <div class="row">
+          <button class="btn bg sm" onclick="doGenerate()">Regenerate</button>
+          <button class="btn bg sm" onclick="copyEmail()">Copy</button>
+        </div>
+      </div>
+      <div id="contactBar" style="display:none;padding:10px 16px;border-bottom:1px solid var(--bd);background:var(--bb)">
+        <div style="font-size:10px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px">Sending To</div>
+        <div class="row">
+          <div id="cAvatar" style="width:30px;height:30px;border-radius:50%;background:var(--ba);border:1px solid rgba(47,129,247,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--bl);flex-shrink:0">?</div>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px" id="cName"></div><div style="font-size:12px;color:var(--tx3)" id="cRole"></div></div>
+          <span class="bdg b-bl" style="font-size:11px" id="cEmail"></span>
+        </div>
+      </div>
+      <div class="emeta" id="eMeta"></div>
+      <div class="ebody" id="eBody">Your email will appear here...</div>
+      <div class="efoot">
+        <span id="eBadge" class="bdg b-gy"><span class="dot"></span>Draft</span>
+        <button class="btn bo sm" onclick="doSend()">Send via Gmail &rarr;</button>
+      </div>
+    </div>
+    <div class="card anim" style="margin-top:10px">
+      <div class="cardhead"><span class="ctitle">Recipient Email</span></div>
+      <div class="fr">
+        <span class="fl">To</span>
+        <input type="email" id="recipientEmail" placeholder="contact@company.com (auto-filled from research)"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: FIND COMPANIES -->
+<div class="page" id="page-finder">
+  <div class="row jb" style="margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div>
+      <h2 style="font-size:16px;font-weight:700;margin-bottom:3px">Find Companies</h2>
+      <p style="font-size:13px;color:var(--tx2)">Discover companies worldwide. Already-contacted ones are excluded automatically.</p>
+    </div>
+    <button class="btn bp" onclick="doFind()"><span id="findTxt">Generate List</span></button>
+  </div>
+  <div class="card" id="finderCard">
+    <div class="empty"><span class="eico">&#128269;</span><p>Click "Generate List" to discover companies to target.</p></div>
+  </div>
+</div>
+
+<!-- PAGE: SENT -->
+<div class="page" id="page-sent">
+  <div class="row jb" style="margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div>
+      <h2 style="font-size:16px;font-weight:700;margin-bottom:3px">Sent Emails</h2>
+      <p style="font-size:13px;color:var(--tx2)">All companies contacted, their point of contact, date sent, and current status.</p>
+    </div>
+    <span id="sent-summary" style="font-size:13px;color:var(--tx3)"></span>
+  </div>
+  <div class="card" id="sentWrap">
+    <div class="empty"><span class="eico">&#128236;</span><p>No emails sent yet. Start your first campaign!</p></div>
+  </div>
+</div>
+
+<!-- PAGE: RESPONSES -->
+<div class="page" id="page-responses">
+  <div class="row jb" style="margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div>
+      <h2 style="font-size:16px;font-weight:700;margin-bottom:3px">Responses</h2>
+      <p style="font-size:13px;color:var(--tx2)">Log company replies. Paste their email and we auto-detect Accepted or Declined.</p>
+    </div>
+    <button class="btn bp sm" onclick="openLogModal()">+ Log Response</button>
+  </div>
+  <div class="card" id="respWrap">
+    <div class="empty"><span class="eico">&#128229;</span><p>No responses logged yet.<br>When a company replies, click "+ Log Response".</p></div>
+  </div>
+</div>
+
+<!-- MODAL: Log Response -->
+<div class="modal-bg" id="logModal">
+  <div class="modal">
+    <div class="mhead"><span class="mtitle">Log a Response</span><button class="mclose" onclick="closeModal('logModal')">&#215;</button></div>
+    <div class="mbody">
+      <div class="gf"><label>Company</label><select id="logCo" class="msel"><option value="">Select a company...</option></select></div>
+      <div class="gf"><label>Paste their email reply (auto-detects status)</label><textarea id="logText" class="mta" placeholder="Paste the email they sent..."></textarea></div>
+      <div class="gf"><label>Or set status manually</label>
+        <select id="logStatus" class="msel">
+          <option value="auto">Auto-detect from email text</option>
+          <option value="accepted">Accepted / Interested</option>
+          <option value="rejected">Declined</option>
+          <option value="maybe">Needs More Info</option>
+        </select>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn bg sm" onclick="closeModal('logModal')">Cancel</button>
+      <button class="btn bp sm" onclick="saveResponse()">Save Response</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Follow-up -->
+<div class="modal-bg" id="fuModal">
+  <div class="modal wide">
+    <div class="mhead">
+      <span class="mtitle">Follow-up: <span id="fu-co"></span></span>
+      <button class="mclose" onclick="closeModal('fuModal')">&#215;</button>
+    </div>
+    <div class="mbody">
+      <div style="padding:8px 12px;background:var(--s2);border-radius:6px;font-size:12px;color:var(--tx3)">
+        Original email sent: <strong style="color:var(--tx)" id="fu-date"></strong>
+      </div>
+      <div id="fu-body" style="background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:16px;font-size:13.5px;line-height:1.85;color:var(--tx);white-space:pre-wrap;font-weight:300;min-height:60px"></div>
+    </div>
+    <div class="mfoot">
+      <button class="btn bg sm" onclick="closeModal('fuModal')">Close</button>
+      <button class="btn bg sm" onclick="copyFollowup()">Copy</button>
+      <button class="btn bp sm" onclick="sendFollowupGmail()">Open in Gmail</button>
+    </div>
+  </div>
+</div>
+
+<div class="tw-wrap" id="tw-wrap"></div>
+
+<script>
+// DATA
+var DB = {
+  getSent: function() { try { return JSON.parse(localStorage.getItem('rs9_sent') || '[]'); } catch(e) { return []; } },
+  setSent: function(v) { localStorage.setItem('rs9_sent', JSON.stringify(v)); },
+  getGmail: function() { return { addr: localStorage.getItem('rs9_ga') || '', pass: localStorage.getItem('rs9_gp') || '' }; },
+  setGmail: function(a, p) { localStorage.setItem('rs9_ga', a); localStorage.setItem('rs9_gp', p); },
+  clearGmail: function() { localStorage.removeItem('rs9_ga'); localStorage.removeItem('rs9_gp'); },
+  getTheme: function() { return localStorage.getItem('rs9_th') || 'dark'; },
+  setTheme: function(t) { localStorage.setItem('rs9_th', t); }
+};
+
+var S = { co: '', research: null, subj: '', body: '', contact: null };
+var FU = { rec: null, subj: '', body: '' };
+
+// INIT
+(function init() {
+  applyTheme(DB.getTheme());
+  loadGmailUI();
+  refreshStats();
+}());
+
+// THEME
+function setTheme(t) {
+  DB.setTheme(t);
+  applyTheme(t);
+  toast('Switched to ' + (t === 'light' ? 'Light' : 'Dark') + ' mode', 'info');
+}
+function applyTheme(t) {
+  document.body.className = t === 'light' ? 'light' : '';
+  document.getElementById('th-dark').className = 'thbtn' + (t === 'dark' ? ' active' : '');
+  document.getElementById('th-light').className = 'thbtn' + (t === 'light' ? ' active' : '');
+}
+
+// NAV TABS
+function goTab(id) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.ntab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  if (id === 'sent') renderSent();
+  if (id === 'responses') renderResponses();
+}
+
+// STATS
+function refreshStats() {
+  var sent = DB.getSent();
+  var acc = sent.filter(function(c) { return c.status === 'accepted'; }).length;
+  var wait = sent.filter(function(c) { return !c.status || c.status === 'awaiting'; }).length;
+  var dec = sent.filter(function(c) { return c.status === 'rejected'; }).length;
+  var resp = sent.filter(function(c) { return c.status && c.status !== 'awaiting'; }).length;
+  document.getElementById('nb-sent').textContent = sent.length;
+  document.getElementById('st-sent').textContent = sent.length;
+  document.getElementById('st-acc').textContent = acc;
+  document.getElementById('st-wait').textContent = wait;
+  document.getElementById('st-dec').textContent = dec;
+  var rb = document.getElementById('nb-resp');
+  if (resp > 0) { rb.style.display = ''; rb.textContent = resp; } else { rb.style.display = 'none'; }
+}
+
+// GMAIL
+function gmailCheck() {
+  var a = document.getElementById('gmailAddr').value.trim();
+  var p = document.getElementById('gmailPass').value.trim();
+  document.getElementById('gmailSaveBtn').disabled = !(a && p);
+}
+function saveGmail() {
+  var a = document.getElementById('gmailAddr').value.trim();
+  var p = document.getElementById('gmailPass').value.trim();
+  if (!a || !p) return;
+  DB.setGmail(a, p);
+  loadGmailUI();
+  toast('Gmail connected!', 'ok');
+}
+function disconnectGmail() {
+  DB.clearGmail();
+  loadGmailUI();
+  document.getElementById('gmailAddr').value = '';
+  document.getElementById('gmailPass').value = '';
+  document.getElementById('gmailSaveBtn').disabled = true;
+}
+function loadGmailUI() {
+  var g = DB.getGmail();
+  if (g.addr && g.pass) {
+    document.getElementById('gmail-form').style.display = 'none';
+    document.getElementById('gmail-connected').style.display = 'block';
+    document.getElementById('gmail-addr-lbl').textContent = g.addr;
+    setBadge('gmail-badge', 'Connected', 'gr');
+  } else {
+    document.getElementById('gmail-form').style.display = 'block';
+    document.getElementById('gmail-connected').style.display = 'none';
+    setBadge('gmail-badge', 'Not connected', 'gy');
+  }
+}
+
+// HELPERS
+function G(id) { return document.getElementById(id); }
+function setBadge(id, txt, type) {
+  var el = G(id);
+  if (!el) return;
+  el.className = 'bdg b-' + type;
+  el.innerHTML = '<span class="dot"></span>' + txt;
+}
+function openRev(id) { G(id).classList.add('open'); }
+function closeRev(id) { G(id).classList.remove('open'); }
+function openModal(id) { G(id).classList.add('open'); }
+function closeModal(id) { G(id).classList.remove('open'); }
+
+function toast(msg, type) {
+  var w = G('tw-wrap');
+  var el = document.createElement('div');
+  el.className = 'toast';
+  var col = type === 'ok' ? 'var(--gr)' : type === 'err' ? 'var(--re)' : 'var(--bl)';
+  var ico = type === 'ok' ? '&#10003;' : type === 'err' ? '&#10005;' : '&#8505;';
+  el.innerHTML = '<span style="color:' + col + ';font-weight:700">' + ico + '</span> ' + msg;
+  w.appendChild(el);
+  requestAnimationFrame(function() { el.classList.add('show'); });
+  setTimeout(function() { el.classList.remove('show'); setTimeout(function() { el.remove(); }, 300); }, 3000);
+}
+
+function setSteps(n) {
+  var labels = ['Company', 'Research', 'Compose', 'Send'];
+  for (var i = 1; i <= 4; i++) {
+    var el = G('stp' + i);
+    el.className = 'step' + (i === n ? ' on' : i < n ? ' done' : '');
+    el.textContent = (i < n ? '&#10003; ' : i + ' ') + labels[i - 1];
+  }
+}
+
+function isDup(name) {
+  var n = (name || '').trim().toLowerCase();
+  return DB.getSent().find(function(c) { return c.name.toLowerCase() === n; });
+}
+
+// DUP CHECK
+document.getElementById('companyName').addEventListener('input', function() {
+  var v = this.value.trim();
+  var d = v ? isDup(v) : null;
+  if (d) {
+    G('dupTxt').textContent = '"' + d.name + '" already contacted on ' + d.date + '. Choose another.';
+    G('dupWarn').classList.add('show');
+    G('lookupBtn').disabled = true;
+  } else {
+    G('dupWarn').classList.remove('show');
+    G('lookupBtn').disabled = false;
+  }
+});
+document.getElementById('companyName').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !G('lookupBtn').disabled) doResearch();
+});
+
+// RESEARCH
+async function doResearch() {
+  var name = G('companyName').value.trim();
+  if (!name) { toast('Enter a company name', 'err'); return; }
+  if (isDup(name)) { toast('Already contacted — choose another', 'err'); return; }
+  S = { co: name, research: null, subj: '', body: '', contact: null };
+  G('lookupBtn').disabled = true;
+  G('lookupTxt').innerHTML = '<span class="spin"></span>';
+  openRev('rev-research');
+  closeRev('rev-compose');
+  closeRev('rev-email');
+  setSteps(2);
+  G('rGrid').innerHTML = '<div class="rfull row" style="color:var(--tx3);gap:8px"><span class="spin spind"></span>Researching ' + name + '...</div>';
+  setBadge('rBadge', 'Loading...', 'gy');
+
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1200,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        system: 'Research a company for a nonprofit STEM youth sponsorship pitch. Return ONLY valid JSON with no markdown:\n{"industry":"string","headquarters":"City, Country","size":"Fortune 500 or Large or Mid-size or Small","csr_focus":"their CSR and education programs","notable_programs":"STEM or youth programs","contact_name":"best contact person","contact_role":"their title","contact_email":"best guessed email","website":"domain.com","why_good_fit":"one sentence why they sponsor STEM youth"}\nReturn only the JSON.',
+        messages: [{ role: 'user', content: 'Research for STEM nonprofit sponsorship: ' + name }]
+      })
+    });
+    var data = await res.json();
+    var raw = data.content.filter(function(b) { return b.type === 'text'; }).map(function(b) { return b.text; }).join('');
+    var info = {};
+    var m = raw.match(/\{[\s\S]*\}/);
+    if (m) { try { info = JSON.parse(m[0]); } catch(e2) {} }
+    if (!info.industry) {
+      var slug = name.toLowerCase().replace(/\s+/g, '');
+      info = { industry: 'Technology', headquarters: 'United States', size: 'Corporate', csr_focus: 'Community investment and education programs.', notable_programs: 'Corporate giving.', contact_name: 'Partnerships Team', contact_role: 'Corporate Relations', contact_email: 'partnerships@' + slug + '.com', website: slug + '.com', why_good_fit: 'Committed to supporting the next generation.' };
+    }
+    S.research = info;
+    S.contact = { name: info.contact_name, role: info.contact_role, email: info.contact_email };
+    if (info.contact_email) G('recipientEmail').value = info.contact_email;
+
+    G('rGrid').innerHTML =
+      '<div class="ri"><label>Industry</label><div class="rv">' + (info.industry || '—') + '</div></div>' +
+      '<div class="ri"><label>HQ</label><div class="rv">' + (info.headquarters || '—') + '</div></div>' +
+      '<div class="ri"><label>Size</label><div class="rv">' + (info.size || '—') + '</div></div>' +
+      '<div class="ri"><label>Website</label><div class="rv">' + (info.website || '—') + '</div></div>' +
+      '<div class="ri rfull"><label>CSR &amp; Education Focus</label><div class="rv">' + (info.csr_focus || '—') + '</div></div>' +
+      '<div class="ri rfull"><label>Notable Programs</label><div class="rv">' + (info.notable_programs || '—') + '</div></div>' +
+      '<div class="ri rfull"><label>Why They Will Care</label><div class="rv">' + (info.why_good_fit || '—') + '</div></div>' +
+      '<div class="cbox">' +
+        '<div style="font-size:10px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Point of Contact</div>' +
+        '<div style="font-size:14px;font-weight:700">' + (info.contact_name || '—') + '</div>' +
+        '<div style="font-size:12px;color:var(--tx3);margin:2px 0 5px">' + (info.contact_role || '') + '</div>' +
+        '<div style="font-size:13px;color:var(--bl)">' + (info.contact_email || '—') + '</div>' +
+      '</div>';
+
+    setBadge('rBadge', 'Complete', 'gr');
+    openRev('rev-compose');
+    setSteps(3);
+  } catch(e) {
+    G('rGrid').innerHTML = '<div class="rfull" style="color:var(--or);font-size:13px">Could not load data. You can still compose below.</div>';
+    setBadge('rBadge', 'Limited', 'or');
+    openRev('rev-compose');
+    setSteps(3);
+  }
+  G('lookupBtn').disabled = false;
+  G('lookupTxt').textContent = 'Look up';
+}
+
+function resetCampaign() {
+  S = { co: '', research: null, subj: '', body: '', contact: null };
+  G('companyName').value = '';
+  G('dupWarn').classList.remove('show');
+  G('lookupBtn').disabled = false;
+  closeRev('rev-research');
+  closeRev('rev-compose');
+  closeRev('rev-email');
+  setSteps(1);
+  G('companyName').focus();
+}
+
+// GENERATE EMAIL
+async function doGenerate() {
+  var sender = G('senderName').value;
+  var tone = G('emailTone').value;
+  var r = S.research || {};
+  G('genBtn').disabled = true;
+  G('genTxt').innerHTML = '<span class="spin"></span> Composing...';
+  openRev('rev-email');
+  G('eBody').textContent = 'Crafting your personalized email...';
+  G('eMeta').innerHTML = '';
+  G('contactBar').style.display = 'none';
+  setBadge('eBadge', 'Composing...', 'gy');
+  setSteps(4);
+
+  var sysPrompt = 'You write sponsorship outreach emails for RoboSpire, a 501(c)(3) nonprofit.\n\n' +
+    'ABOUT ROBOSPIRE: Founded by two passionate high schoolers in Northern Virginia. ' +
+    'Teaches hands-on robotics and STEM to elementary and middle school students. ' +
+    'Students build real robots, write real code, and compete in robotics competitions. ' +
+    '501(c)(3) tax-exempt. Has raised over $10,000. Active in 10 or more US states and 10 or more countries worldwide.\n\n' +
+    'TONE: ' + tone + '. Warm, genuine, and deeply appreciative throughout. Sound like a real passionate young founder.\n\n' +
+    'RULES:\n' +
+    '- No em dashes, no semicolons, no hyphens as punctuation, no colons mid-sentence\n' +
+    '- No phrases like not just X but Y or from X to Y\n' +
+    '- Never open with I hope this email finds you well\n' +
+    '- Periods and commas only. Short varied human sentences. No bullet points.\n' +
+    '- Be sincerely appreciative and grateful to the company throughout\n' +
+    '- Naturally mention: $10,000+ raised, 10+ countries, 10+ US states, students competing in real robotics competitions\n\n' +
+    'BENEFITS: Enriching STEM education, empowering next-gen engineers, brand visibility, tax-deductible 501c3, community impact, offer to meet or call.\n' +
+    'ASK: Any contribution, big or small. Humble and low-pressure. No dollar amount.\n' +
+    'FORMAT: Email body only. Final line must be exactly: SUBJECT: [subject line]\n' +
+    'No bracket placeholders in the body. Specific to this company only.';
+
+  var userMsg = 'Write a sponsorship email to ' + S.co + '. ' +
+    'Industry: ' + (r.industry || 'technology') + '. ' +
+    'HQ: ' + (r.headquarters || 'unknown') + '. ' +
+    'CSR: ' + (r.csr_focus || 'community programs') + '. ' +
+    'Programs: ' + (r.notable_programs || 'giving') + '. ' +
+    'Contact: ' + (r.contact_name || 'their team') + ', ' + (r.contact_role || '') + '. ' +
+    'Why they fit: ' + (r.why_good_fit || 'education focused') + '. ' +
+    'Sign off as: ' + sender + ', RoboSpire.';
+
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: sysPrompt,
+        messages: [{ role: 'user', content: userMsg }]
+      })
+    });
+    var data = await res.json();
+    var full = data.content[0].text;
+    var sm = full.match(/SUBJECT:\s*(.+)$/m);
+    S.subj = sm ? sm[1].trim() : 'Partnership Opportunity with RoboSpire';
+    S.body = full.replace(/\nSUBJECT:.+$/m, '').trim()
+      .replace(/\u2014|\u2013/g, ',').replace(/;/g, '.');
+
+    G('eBody').textContent = S.body;
+    var toAddr = (r.contact_email || G('recipientEmail').value || '');
+    G('eMeta').innerHTML =
+      '<div class="emrow"><span class="emlbl">To</span><span>' + toAddr + '</span></div>' +
+      '<div class="emrow"><span class="emlbl">From</span><span>' + sender + ', RoboSpire</span></div>' +
+      '<div class="emrow"><span class="emlbl">Subject</span><span style="font-weight:600">' + S.subj + '</span></div>';
+
+    if (S.contact && S.contact.name) {
+      var parts = S.contact.name.split(' ');
+      var ini = parts.map(function(w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase();
+      G('cAvatar').textContent = ini;
+      G('cName').textContent = S.contact.name;
+      G('cRole').textContent = S.contact.role || '';
+      G('cEmail').textContent = S.contact.email || '';
+      G('contactBar').style.display = 'block';
+    }
+    setBadge('eBadge', 'Ready to send', 'gr');
+  } catch(e) {
+    G('eBody').textContent = 'Error generating email. Please try again.';
+    setBadge('eBadge', 'Error', 're');
+    toast('Generation failed — please retry', 'err');
+  }
+  G('genBtn').disabled = false;
+  G('genTxt').textContent = 'Regenerate';
+}
+
+function copyEmail() {
+  if (!S.body) { toast('Generate an email first', 'err'); return; }
+  navigator.clipboard.writeText('Subject: ' + S.subj + '\n\n' + S.body)
+    .then(function() { toast('Copied to clipboard', 'ok'); });
+}
+
+// SEND
+function doSend() {
+  if (!S.body) { toast('Generate an email first', 'err'); return; }
+  var g = DB.getGmail();
+  if (!g.addr) { toast('Connect Gmail at the top of this page first', 'err'); return; }
+  var to = G('recipientEmail').value.trim() || (S.contact ? S.contact.email : '') || '';
+  if (!to) { toast('Enter a recipient email address', 'err'); return; }
+
+  var subj = encodeURIComponent(S.subj || 'Partnership Opportunity with RoboSpire');
+  var body = encodeURIComponent(S.body);
+  window.open('https://mail.google.com/mail/?view=cm&to=' + encodeURIComponent(to) + '&su=' + subj + '&body=' + body, '_blank');
+
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  var sent = DB.getSent();
+  sent.unshift({
+    id: Date.now(),
+    name: S.co,
+    industry: S.research ? (S.research.industry || '') : '',
+    contact_name: S.contact ? (S.contact.name || '') : '',
+    contact_role: S.contact ? (S.contact.role || '') : '',
+    contact_email: to,
+    subject: S.subj,
+    body: S.body,
+    date: dateStr,
+    dateTs: now.getTime(),
+    status: 'awaiting',
+    responseText: ''
+  });
+  DB.setSent(sent);
+  refreshStats();
+  setBadge('eBadge', 'Sent', 'bl');
+  toast('Gmail opened and marked as sent!', 'ok');
+}
+
+// SENT TABLE
+function statusBadge(s) {
+  var m = { awaiting: ['b-ye', 'Awaiting Reply'], accepted: ['b-gr', 'Accepted'], rejected: ['b-re', 'Declined'], maybe: ['b-bl', 'Needs Info'] };
+  var v = m[s] || ['b-gy', s || 'Unknown'];
+  return '<span class="bdg ' + v[0] + '"><span class="dot"></span>' + v[1] + '</span>';
+}
+
+function renderSent() {
+  var sent = DB.getSent();
+  var wrap = G('sentWrap');
+  if (!sent.length) {
+    wrap.innerHTML = '<div class="empty"><span class="eico">&#128236;</span><p>No emails sent yet.</p></div>';
+    G('sent-summary').textContent = '';
+    refreshStats();
+    return;
+  }
+  var acc = sent.filter(function(c) { return c.status === 'accepted'; }).length;
+  var wait = sent.filter(function(c) { return !c.status || c.status === 'awaiting'; }).length;
+  G('sent-summary').innerHTML = sent.length + ' sent &nbsp;&middot;&nbsp; <span style="color:var(--gr)">' + acc + ' accepted</span> &nbsp;&middot;&nbsp; <span style="color:var(--ye)">' + wait + ' awaiting</span>';
+  refreshStats();
+
+  var rows = sent.map(function(c) {
+    return '<tr>' +
+      '<td><div style="font-weight:600">' + c.name + '</div><div style="font-size:11px;color:var(--tx3)">' + (c.industry || '') + '</div></td>' +
+      '<td><div>' + (c.contact_name || '&mdash;') + '</div><div style="font-size:11px;color:var(--tx3)">' + (c.contact_role || '') + '</div></td>' +
+      '<td style="font-size:12px;color:var(--bl)">' + (c.contact_email || '&mdash;') + '</td>' +
+      '<td><div class="trunc" style="font-size:12px;color:var(--tx2)">' + (c.subject || '&mdash;') + '</div></td>' +
+      '<td style="font-size:12px;color:var(--tx3);white-space:nowrap">' + c.date + '</td>' +
+      '<td>' + statusBadge(c.status || 'awaiting') + '</td>' +
+      '<td><div class="row" style="gap:5px">' +
+        '<button class="btn bg xs" onclick="openFollowup(' + c.id + ')">Follow-up</button>' +
+        '<button class="btn bg xs" style="color:var(--re)" onclick="deleteSent(' + c.id + ')">&#10005;</button>' +
+      '</div></td>' +
+    '</tr>';
+  }).join('');
+
+  wrap.innerHTML = '<div class="tw"><table>' +
+    '<thead><tr><th>Company</th><th>Point of Contact</th><th>Contact Email</th><th>Subject</th><th>Sent</th><th>Status</th><th>Actions</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table></div>';
+}
+
+function deleteSent(id) {
+  var sent = DB.getSent().filter(function(c) { return c.id !== id; });
+  DB.setSent(sent);
+  renderSent();
+}
+
+// RESPONSES
+function openLogModal() {
+  var sel = G('logCo');
+  sel.innerHTML = '<option value="">Select a company...</option>';
+  DB.getSent().forEach(function(c) {
+    var opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name + ' (sent ' + c.date + ')';
+    sel.appendChild(opt);
+  });
+  G('logText').value = '';
+  G('logStatus').value = 'auto';
+  openModal('logModal');
+}
+
+function detectStatus(text) {
+  var t = text.toLowerCase();
+  var yes = ['interested', 'yes', 'love to', 'happy to', 'would love', 'sounds great', 'forward to', 'schedule', 'meeting', 'call', 'donate', 'contribute', 'support', 'partner', 'sponsor', 'absolutely', 'definitely', 'certainly'];
+  var no = ['not interested', 'unable', 'cannot', 'regret', 'decline', 'unfortunately', 'not at this time', 'not a fit', 'no thank', 'not able', 'pass', 'no budget'];
+  var maybe = ['more information', 'more info', 'tell me more', 'learn more', 'questions', 'details', 'clarify'];
+  var ys = yes.filter(function(w) { return t.indexOf(w) !== -1; }).length;
+  var ns = no.filter(function(w) { return t.indexOf(w) !== -1; }).length;
+  var ms = maybe.filter(function(w) { return t.indexOf(w) !== -1; }).length;
+  if (ns > 0 && ns >= ys) return 'rejected';
+  if (ys > 0) return 'accepted';
+  if (ms > 0) return 'maybe';
+  return 'maybe';
+}
+
+function saveResponse() {
+  var id = parseInt(G('logCo').value);
+  if (!id) { toast('Select a company', 'err'); return; }
+  var text = G('logText').value.trim();
+  var manual = G('logStatus').value;
+  var status = manual === 'auto' ? (text ? detectStatus(text) : 'maybe') : manual;
+  var sent = DB.getSent();
+  var rec = null;
+  for (var i = 0; i < sent.length; i++) { if (sent[i].id === id) { rec = sent[i]; break; } }
+  if (rec) { rec.status = status; rec.responseText = text; }
+  DB.setSent(sent);
+  refreshStats();
+  closeModal('logModal');
+  var lbl = { accepted: 'Accepted', rejected: 'Declined', maybe: 'Needs More Info' };
+  toast('Status set to: ' + (lbl[status] || status), 'ok');
+  if (G('page-responses').classList.contains('active')) renderResponses();
+  if (G('page-sent').classList.contains('active')) renderSent();
+}
+
+function renderResponses() {
+  var responded = DB.getSent().filter(function(c) { return c.status && c.status !== 'awaiting'; });
+  var wrap = G('respWrap');
+  if (!responded.length) {
+    wrap.innerHTML = '<div class="empty"><span class="eico">&#128229;</span><p>No responses logged yet.</p></div>';
+    return;
+  }
+  var rows = responded.map(function(c) {
+    var snippet = c.responseText ? c.responseText.slice(0, 100) + '...' : '&mdash;';
+    return '<tr>' +
+      '<td style="font-weight:600">' + c.name + '</td>' +
+      '<td><div>' + (c.contact_name || '&mdash;') + '</div><div style="font-size:11px;color:var(--bl)">' + (c.contact_email || '') + '</div></td>' +
+      '<td style="font-size:12px;color:var(--tx3);white-space:nowrap">' + c.date + '</td>' +
+      '<td>' + statusBadge(c.status) + '</td>' +
+      '<td style="font-size:12px;color:var(--tx3);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + snippet + '</td>' +
+    '</tr>';
+  }).join('');
+  wrap.innerHTML = '<div class="tw"><table>' +
+    '<thead><tr><th>Company</th><th>Contact</th><th>Original Sent</th><th>Status</th><th>Response</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table></div>';
+}
+
+// FOLLOW-UP
+async function openFollowup(id) {
+  var sent = DB.getSent();
+  var rec = null;
+  for (var i = 0; i < sent.length; i++) { if (sent[i].id === id) { rec = sent[i]; break; } }
+  if (!rec) return;
+  FU = { rec: rec, subj: '', body: '' };
+  G('fu-co').textContent = rec.name;
+  G('fu-date').textContent = rec.date;
+  G('fu-body').textContent = 'Generating follow-up email...';
+  openModal('fuModal');
+  var days = Math.max(1, Math.round((Date.now() - (rec.dateTs || Date.now())) / 86400000));
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        system: 'Write a short warm follow-up sponsorship email for RoboSpire, a 501c3 nonprofit by high schoolers. STEM robotics for kids in 10+ countries and 10+ US states. Raised $10,000+. Warm, genuine, appreciative tone. No em dashes, no semicolons, no colons mid-sentence. Periods and commas only. 2 to 4 sentences. Grateful and human. End with exactly: SUBJECT: [subject line]',
+        messages: [{ role: 'user', content: 'Follow-up to ' + rec.name + '. Original subject was: ' + rec.subject + '. Days since: ' + days + '. Contact: ' + (rec.contact_name || 'their team') + '.' }]
+      })
+    });
+    var data = await res.json();
+    var full = data.content[0].text;
+    var sm = full.match(/SUBJECT:\s*(.+)$/m);
+    FU.subj = sm ? sm[1].trim() : 'Following Up from RoboSpire';
+    FU.body = full.replace(/\nSUBJECT:.+$/m, '').trim()
+      .replace(/\u2014|\u2013/g, ',').replace(/;/g, '.');
+    G('fu-body').textContent = FU.body;
+  } catch(e) {
+    G('fu-body').textContent = 'Error generating. Please try again.';
+  }
+}
+
+function copyFollowup() {
+  if (!FU.body) return;
+  navigator.clipboard.writeText('Subject: ' + FU.subj + '\n\n' + FU.body)
+    .then(function() { toast('Copied', 'ok'); });
+}
+
+function sendFollowupGmail() {
+  if (!FU.body || !FU.rec) return;
+  var to = FU.rec.contact_email || '';
+  var subj = encodeURIComponent(FU.subj || 'Following Up from RoboSpire');
+  var body = encodeURIComponent(FU.body);
+  window.open('https://mail.google.com/mail/?view=cm&to=' + encodeURIComponent(to) + '&su=' + subj + '&body=' + body, '_blank');
+  closeModal('fuModal');
+  toast('Follow-up opened in Gmail', 'ok');
+}
+
+// FIND COMPANIES
+async function doFind() {
+  var btn = document.querySelector('#page-finder .bp');
+  btn.disabled = true;
+  G('findTxt').innerHTML = '<span class="spin"></span> Searching...';
+  G('finderCard').innerHTML = '<div class="empty"><span class="eico" style="animation:rot 1s linear infinite;display:inline-block">&#9711;</span><p>Finding companies worldwide...</p></div>';
+
+  var alreadySent = DB.getSent().map(function(c) { return c.name.toLowerCase().trim(); });
+  var exc = alreadySent.length ? alreadySent.slice(0, 30).join(', ') : 'none';
+  var sectors = ['enterprise software', 'aerospace', 'semiconductors', 'fintech', 'healthcare tech', 'consumer electronics', 'logistics', 'cybersecurity', 'clean energy', 'cloud computing', 'gaming', 'biotech', 'automotive tech', 'robotics', 'industrial automation', 'edtech', 'telecom', 'AI tools', 'space technology', 'media technology'];
+  var p1 = sectors[Math.floor(Math.random() * sectors.length)];
+  var p2 = sectors[Math.floor(Math.random() * sectors.length)];
+
+  var sysPrompt = 'Find sponsorship targets worldwide for a STEM robotics nonprofit. Return ONLY a raw JSON array starting with [ and ending with ]. No markdown, no explanation.\n\n' +
+    'Requirements:\n' +
+    '- 2 large globally recognized companies (any country)\n' +
+    '- 2 mid-size companies not commonly known (any country)\n' +
+    '- 2 small or niche lesser-known tech firms (any country)\n' +
+    '- 2 companies from ' + p1 + ' or ' + p2 + ' sector\n' +
+    '- Include non-US companies. Mix countries.\n' +
+    '- Every company must have reason to care about STEM youth education\n' +
+    '- EXCLUDE these companies: [' + exc + ']\n\n' +
+    'Return only this JSON array:\n' +
+    '[{"name":"string","industry":"string","hq":"City, Country","why":"one sentence reason","size":"Large or Mid or Small","csr_known":true,"country":"country name"}]';
+
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1600,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        system: sysPrompt,
+        messages: [{ role: 'user', content: 'Find 8 diverse global companies for STEM nonprofit sponsorship. Worldwide. Exclude: ' + exc }]
+      })
+    });
+    var data = await res.json();
+    var raw = data.content.filter(function(b) { return b.type === 'text'; }).map(function(b) { return b.text; }).join('');
+    var companies = [];
+    var trimmed = raw.trim();
+    if (trimmed.charAt(0) === '[') { try { companies = JSON.parse(trimmed); } catch(e2) {} }
+    if (!companies.length) {
+      var am = raw.match(/\[[\s\S]*\]/);
+      if (am) { try { companies = JSON.parse(am[0]); } catch(e3) {} }
+    }
+    companies = companies.filter(function(c) {
+      var n = (c.name || '').toLowerCase().trim();
+      return n && !alreadySent.some(function(a) { return a === n; });
+    });
+
+    if (!companies.length) {
+      G('finderCard').innerHTML = '<div class="empty"><p>All suggestions already contacted. Click again for a fresh batch.</p></div>';
+    } else {
+      var html = companies.map(function(c) {
+        var safeName = (c.name || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var tags = '';
+        if (c.industry) tags += '<span class="ctag">' + c.industry + '</span> ';
+        if (c.hq) tags += '<span class="ctag">' + c.hq + '</span> ';
+        if (c.size) tags += '<span class="ctag">' + c.size + '</span> ';
+        if (c.country && c.country !== 'United States') tags += '<span class="ctag" style="color:var(--bl);background:var(--ba)">&#127757; ' + c.country + '</span> ';
+        if (c.csr_known) tags += '<span class="ctag" style="color:var(--gr);background:var(--ga)">Has CSR</span>';
+        return '<div class="csrow">' +
+          '<div class="csleft">' +
+            '<div class="csname">' + safeName + '</div>' +
+            '<div class="cswhy">' + (c.why || '') + '</div>' +
+            '<div class="cstags">' + tags + '</div>' +
+          '</div>' +
+          '<button class="btn bp sm" style="flex-shrink:0;margin-left:10px" data-coname="' + safeName + '" onclick="doTarget(this)">Target &rarr;</button>' +
+        '</div>';
+      }).join('');
+      G('finderCard').innerHTML = html;
+    }
+  } catch(e) {
+    G('finderCard').innerHTML = '<div class="empty"><p style="color:var(--re)">Could not load suggestions. Please try again.</p></div>';
+  }
+  btn.disabled = false;
+  G('findTxt').textContent = 'Generate List';
+}
+
+function doTarget(btn) {
+  var name = btn.getAttribute('data-coname');
+  if (!name) return;
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+  goTab('new');
+  setTimeout(function() {
+    G('companyName').value = name;
+    G('companyName').dispatchEvent(new Event('input'));
+    if (!isDup(name)) {
+      setTimeout(function() { doResearch(); }, 100);
+    } else {
+      toast(name + ' was already contacted', 'err');
+      btn.disabled = false;
+      btn.textContent = 'Target \u2192';
+    }
+  }, 200);
+}
+</script>
+</body>
+</html>
